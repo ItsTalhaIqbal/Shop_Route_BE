@@ -18,7 +18,7 @@ app.use(
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 
-app.use('/',(req:Request,res:Response)=>{
+app.get('/',(req:Request,res:Response)=>{
   res.json({Message:"Hello from backend"})
 })
 app.use("/api", router);
