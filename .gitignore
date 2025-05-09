@@ -1,0 +1,17 @@
+
+# dependencies
+/node_modules
+/uploads
+
+
+# debug
+npm-debug.log*
+
+# local env files
+.env*.local
+
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+.env
