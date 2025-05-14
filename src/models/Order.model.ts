@@ -1,14 +1,23 @@
+import { Types } from "mongoose";
 import mongoose from "mongoose";
 
-const OrderSchema = new mongoose.Schema(
+type IOrder = {
+  user: Types.ObjectId;
+  city: Types.ObjectId;
+  area: Types.ObjectId;
+  shop: Types.ObjectId;
+  items: [{ product_id: Types.ObjectId; quantity: number }];
+  paymentMethod:string,
+  price:number,
+  status:string
+};
+
+const OrderSchema = new mongoose.Schema<IOrder>(
   {
-    name: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"User",
+      required:true
     },
     city: {
       type: mongoose.Schema.Types.ObjectId,
@@ -35,30 +44,27 @@ const OrderSchema = new mongoose.Schema(
         quantity: {
           type: Number,
           required: true,
-          max:5
+          max: 5,
         },
-       
       },
     ],
     paymentMethod: {
       type: String,
-      enum: ["cod", "card"], 
+      enum: ["cod", "card"],
       required: true,
     },
-    price:{
-      type:Number,
-      required:true
-      
+    price: {
+      type: Number,
+      required: true,
     },
     status: {
       type: String,
       required: true,
       default: "pending",
-      enum: ["pending", "processing", "shipped", ],
+      enum: ["pending", "processing", "shipped", "canceled"],
     },
-    
   },
   { timestamps: true }
 );
 
-export const Order = mongoose.model("Order", OrderSchema);
+export const Order = mongoose.model<IOrder>("Order", OrderSchema);

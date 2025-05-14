@@ -1,8 +1,7 @@
 import Joi from "joi";
 
 const orderValidationSchema = Joi.object({
-  name: Joi.string().trim().required(),
-  email: Joi.string().email().required(),
+  user: Joi.string().trim().required(),
   city: Joi.string().trim().required(),    
   area: Joi.string().trim().required(),    
   shop: Joi.string().trim().required(),    

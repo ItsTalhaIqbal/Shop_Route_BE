@@ -5,7 +5,16 @@ export const CreateArea = async (req: any, res: any) => {
   const data = req.body;
 
   try {
-   
+    const exixtingAreas = await Area.find();
+       const matchData = exixtingAreas.find(
+      (area) =>
+        area.name == data.name &&
+        area.city == data.city
+    )
+       if (matchData) {
+         res.status(400).send({ message: "Same Area for this City Already Exist.." });
+         return;
+       }
     const newArea = await Area.create(data);
     res.status(200).send({ message: "Area Created Successfully", response: newArea });
   } catch (error) {
@@ -19,6 +28,17 @@ export const UpdateArea = async (req: any, res: any) => {
   const data = req.body; 
 
   try {
+     const exixtingAreas = await Area.find();
+       const matchData = exixtingAreas.find(
+      (area) =>
+        area.name == data.name &&
+        area.city == data.city &&
+        area._id.toString() !== id
+    )
+       if (matchData) {
+         res.status(400).send({ message: "Same Area for this City Already Exist.." });
+         return;
+       }
    
     const updateArea = await Area.findByIdAndUpdate(id, data, { new: true });
     if (!updateArea) {
@@ -49,9 +69,6 @@ export const DeleteArea = async (req: any, res: any) => {
 export const GetAllAreas = async (req: any, res: any) => {
   try {
     const areas = await Area.find();
-    if (areas.length === 0) {
-      return res.status(404).send({ message: "No areas found" });
-    }
     res.status(200).send({ message: "All Cities Retrieved Successfully", response: areas });
   } catch (error) {
     res.status(400).send({ message: "Failed to retrieve areas", error });

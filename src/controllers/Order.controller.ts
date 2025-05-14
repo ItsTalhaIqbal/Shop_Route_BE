@@ -1,6 +1,6 @@
 import { Order } from "../models/Order.model";
 
-export const CreateOrder = async (req:any, res:any) => {
+export const CreateOrder = async (req: any, res: any) => {
   const data = req.body;
 
   try {
@@ -11,7 +11,7 @@ export const CreateOrder = async (req:any, res:any) => {
   }
 };
 
-export const UpdateOrder = async (req:any, res:any) => {
+export const UpdateOrder = async (req: any, res: any) => {
   const { id } = req.params;
   const data = req.body;
   try {
@@ -22,7 +22,7 @@ export const UpdateOrder = async (req:any, res:any) => {
   }
 };
 
-export const DeleteOrder = async (req:any, res:any) => {
+export const DeleteOrder = async (req: any, res: any) => {
   const { id } = req.params;
 
   try {
@@ -33,23 +33,35 @@ export const DeleteOrder = async (req:any, res:any) => {
   }
 };
 
-export const GetAllOrders = async (req:any, res:any) => {
+export const GetAllOrders = async (req: any, res: any) => {
   try {
-    const response = await Order.find();
-    res.status(200).send(response);
+    const response = await Order.find()
+      .populate("user", ["username", "role", "email","username"])
+      .populate("area", "name")
+      .populate("city", "name")
+      .populate("shop")
+      .populate("items.product_id")
+      .lean();
+
+    res.status(200).send({ message: "orders retrived successfully", response });
   } catch (error) {
     res.status(400).send({ message: "Failed to Find Orders", error });
   }
 };
 
-export const GetOrder = async (req:any, res:any) => {
+export const GetOrder = async (req: any, res: any) => {
   const { id } = req.params;
 
   try {
-    const response = await Order.findById(id);
-    res.status(200).send(response);
+    const response = await Order.findById(id)
+      .populate("user", ["name", "email", "role","username"])
+      .populate("area")
+      .populate("city")
+      .populate("shop")
+      .populate("items.product_id")
+      .lean();
+    res.status(200).send({ message: "success", response });
   } catch (error) {
     res.status(400).send({ message: "Failed to Find Order", error });
   }
 };
-

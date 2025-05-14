@@ -7,6 +7,17 @@ export const CreateShop = async (
 ): Promise<void> => {
   const data = req.body;
   try {
+    const exixtingShops = await Shop.find();
+    const matchData = exixtingShops.find(
+      (shop) =>
+        shop.name === data.name &&
+        shop.city === data.city &&
+        shop.area === data.area
+    );
+    if (matchData) {
+      res.status(400).send({ message: "Same Shop Data Already Exist." });
+      return;
+    }
     const response = await Shop.create(data);
     res.status(200).send({ message: "Successfully created Shop", response });
   } catch (error) {
@@ -24,6 +35,18 @@ export const UpdateShop = async (
     res.status(400).send({ message: "Shop Id is not defined ." });
   }
   try {
+     const exixtingShops = await Shop.find();
+    const matchData = exixtingShops.find(
+      (shop) =>
+        shop.name === data.name &&
+        shop.city === data.city &&
+        shop.area === data.area &&
+        shop._id.toString() !== id
+    );
+    if (matchData) {
+      res.status(400).send({ message: "Same Shop Data Already Exist." });
+      return;
+    }
     const response = await Shop.findByIdAndUpdate(id, data, { new: true });
     res.status(200).send({ message: "Successfully updated Shop", response });
   } catch (error) {

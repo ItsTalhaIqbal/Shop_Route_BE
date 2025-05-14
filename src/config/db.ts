@@ -2,7 +2,8 @@
 import mongoose from 'mongoose'
 export const ConnectDB = async () => {
   try {
-    const uri = process.env.MONGO_URI;
+    // const uri = process.env.MONGO_URI;
+    const uri = "mongodb://localhost:27017/"
     if (!uri) {
       console.log("MongoDB URI Not Defined");
       return;

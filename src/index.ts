@@ -1,5 +1,4 @@
-"use strict"
-import express, { Request, Response, urlencoded } from "express";
+import express, { urlencoded } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { ConnectDB } from "./config/db";
@@ -19,9 +18,7 @@ app.use(
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 
-app.get('/',(req:Request,res:Response)=>{
-  res.json({Message:"Hello from backend"})
-})
+
 app.use("/api", router);
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
